@@ -1,0 +1,21 @@
+{
+  "name": "vue-data-preloader",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "serve": "npm run dev-service",
+    "dev-service": "vue-cli-service --port 8081 serve"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bootstrap-vue": "^2.21.2",
+    "vue": "^2.6.12"
+  },
+  "devDependencies": {
+    "@vue/cli-service": "^4.5.11",
+    "vue-template-compiler": "^2.6.12"
+  }
+}
