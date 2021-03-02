@@ -7,5 +7,5 @@
 ## Run dev server with vue-cli-service:
 ```npm run serve```
 
-## Populate table in filesystem database:
+## Populate filesystem database:
 ```npm run populate-tasks```
