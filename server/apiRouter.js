@@ -12,10 +12,9 @@ function createApiRouter(app) {
     router.get('/users', async function(req, res) {
         const { from, to } = req.query;
 
-        console.log(from, to);
-
         const db = app.get('db');
-        const tasks = db(TASKS).whereBetween('id', [from, to]);
+        const tasks = await db(TASKS).whereBetween('id', [from, to]);
+
         res.json(tasks);
     })
 
