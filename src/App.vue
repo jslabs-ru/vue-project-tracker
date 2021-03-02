@@ -1,16 +1,18 @@
 <template>
     <b-container>
-        <Tasks />
+        <b-navbar class="bg-light">
+            <b-navbar-nav>
+                <b-nav-item to="/">Main</b-nav-item>
+                <b-nav-item to="/tasks">Tasks</b-nav-item>
+            </b-navbar-nav>
+        </b-navbar>
+
+        <RouterView />
     </b-container>
 </template>
 
 <script>
-import Tasks from '@/components/Tasks.vue';
-
 export default {
-    name: 'App',
-    components: {
-        Tasks
-    }
+    name: 'App'
 }
 </script>
