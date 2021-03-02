@@ -7,7 +7,7 @@ const app = express();
 
 const PORT = parseInt(process.env.PORT) || 5000;
 
-app.use('/api/v1', createApiRouter(app));
+app.use('/api/v2', createApiRouter(app));
 
 async function startServer(db) {
     app.set('db', db);
