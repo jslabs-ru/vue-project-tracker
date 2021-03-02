@@ -23,7 +23,6 @@ function createApiRouter(app) {
             result = await db(TASKS).whereBetween('id', [from, to]);
         }
 
-
         res.json(result);
     })
 
