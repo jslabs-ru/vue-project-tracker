@@ -7,6 +7,8 @@ import router from '@/router';
 import 'bootstrap/dist/css/bootstrap-reboot.min.css';
 import 'bootstrap/dist/css/bootstrap.css';
 
+import '@/styles/main.css';
+
 Vue.use(BootstrapVue);
 Vue.use(Vuelidate);
 
