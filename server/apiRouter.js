@@ -9,7 +9,7 @@ function createApiRouter(app) {
     router.use(bodyParser.json());
     router.use(bodyParser.urlencoded({ extended: true }));
 
-    router.get('/users', async function(req, res) {
+    router.get('/tasks', async function(req, res) {
         const { from, to } = req.query;
 
         const db = app.get('db');
