@@ -1,0 +1,7 @@
+.paginator {max-width: 450px;}
+.paginator-item {
+	margin: 3px;
+	display: inline-block;
+	cursor: pointer;
+}
+.paginator-item--active {color: red;}
