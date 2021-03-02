@@ -2,11 +2,20 @@ import Vue from 'vue';
 import VueRouter from 'vue-router';
 
 import Main from '@/components/Main.vue';
+
 const Tasks = () =>
     import(
         /* webpackChunkName: "tasks" */
         '@/components/Tasks.vue'
     );
+
+const Users = () =>
+    import(
+        /* webpackChunkName: "users" */
+        '@/components/Users.vue'
+    );
+
+import UserData from '@/components/UserData.vue';
 
 import NotFound from '@/components/NotFound.vue';
 
@@ -23,6 +32,18 @@ const routes = [
         path: '/tasks',
         components: {
             default: Tasks
+        }
+    },
+    {
+        path: '/users',
+        components: {
+            default: Users
+        }
+    },
+    {
+        path: '/users/:userid',
+        components: {
+            default: UserData
         }
     },
     {
