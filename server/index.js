@@ -20,7 +20,7 @@ async function startServer(db) {
 startServer(knex({
     client: 'sqlite3',
     connection: {
-        filename: './data.db',
+        filename: './data/data.db',
     },
     useNullAsDefault: true
 }));

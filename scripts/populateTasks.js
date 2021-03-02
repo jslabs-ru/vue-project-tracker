@@ -5,7 +5,7 @@ const ObjectID = require('bson-objectid');
 const knex = require('knex')({
     client: 'sqlite3',
     connection: {
-        filename: './data.db',
+        filename: './data/data.db',
     },
     useNullAsDefault: true
 });
