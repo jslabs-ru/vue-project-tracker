@@ -10,12 +10,21 @@ function createApiRouter(app) {
     router.use(bodyParser.urlencoded({ extended: true }));
 
     router.get('/tasks', async function(req, res) {
-        const { from, to } = req.query;
+        let result,
+            { from = 0, to = 10, count } = req.query;
+        count = parseInt(count);
 
         const db = app.get('db');
-        const tasks = await db(TASKS).whereBetween('id', [from, to]);
 
-        res.json(tasks);
+        if(count === 1) {
+            result = await db(TASKS).count();
+            result = result[0]['count(*)'];
+        } else {
+            result = await db(TASKS).whereBetween('id', [from, to]);
+        }
+
+
+        res.json(result);
     })
 
     return router;
