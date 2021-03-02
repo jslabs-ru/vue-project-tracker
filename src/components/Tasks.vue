@@ -26,6 +26,8 @@
 </template>
 
 <script>
+import TaskService from '@/services/taskService';
+
 export default {
     data () {
         return {
@@ -40,11 +42,12 @@ export default {
             return this.items.length
         }
     },
-    async created () {
-        const data = await import(/* webpackChunkName: "tasks-data" */ '@/../data/data.json');
-
-        this.items = data.default;
-        this.isLoading = false;
+    created () {
+        TaskService.getAll()
+            .then(tasks => {
+                this.items = tasks;
+                this.isLoading = false;
+            })
     }
 }
 </script>
