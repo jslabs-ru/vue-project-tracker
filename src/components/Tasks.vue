@@ -15,18 +15,19 @@
                 small
             ></b-table>
 
-            <b-pagination
-                v-model="currentPage"
-                :total-rows="rows"
-                :per-page="perPage"
-                aria-controls="my-table"
-            ></b-pagination>
+            <Paginator
+                :pagesCount="pagesCount"
+                @page-click="onPageClick"
+            />
         </div>
     </div>
 </template>
 
 <script>
 import TaskService from '@/services/taskService';
+import Paginator from '@/components/paginator/Paginator.vue';
+
+const COUNT_ON_PAGE = 10;
 
 export default {
     data () {
@@ -34,20 +35,43 @@ export default {
             isLoading: true,
             perPage: 10,
             currentPage: 1,
-            items: []
+            items: [],
+            pagesCount: 0
         }
+    },
+    components: {
+        Paginator
     },
     computed: {
         rows() {
             return this.items.length
         }
     },
-    created () {
-        TaskService.getAll()
+    async created () {
+        let tasksCount = await TaskService.getTasksCount();
+
+        this.pagesCount = Math.ceil(tasksCount / COUNT_ON_PAGE);
+
+        TaskService.getAll({})
             .then(tasks => {
                 this.items = tasks;
                 this.isLoading = false;
             })
+    },
+    methods: {
+        onPageClick (page) {
+            let from = page * COUNT_ON_PAGE;
+            let to = from + COUNT_ON_PAGE;
+
+            return TaskService.getAll({
+                from,
+                to
+            }).then(tasks => {
+                this.items = tasks;
+            }).catch(error => {
+                console.log('ERROR', error);
+            })
+        }
     }
 }
 </script>
