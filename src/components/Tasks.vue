@@ -41,7 +41,7 @@ export default {
         }
     },
     async created () {
-        const data = await import('../../data/data.json');
+        const data = await import(/* webpackChunkName: "tasks-data" */ '@/../data/data.json');
 
         this.items = data.default;
         this.isLoading = false;
