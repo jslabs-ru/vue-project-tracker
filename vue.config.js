@@ -6,7 +6,7 @@ module.exports = {
                 pathRewrite: { '^/api/v1': '/' }
             },
             '^/api/v2': {
-                target: 'localhost:3001'
+                target: 'http://localhost:3001/'
             }
         }
     }
