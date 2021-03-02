@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import ObjectID from 'bson-objectid';
 
 import Main from '@/components/Main.vue';
 
@@ -15,11 +16,19 @@ const Users = () =>
         '@/components/Users.vue'
     );
 
+const Project = () =>
+    import(
+        /* webpackChunkName: "project" */
+        '@/components/Project.vue'
+    );
+
 import UserData from '@/components/UserData.vue';
 
 import NotFound from '@/components/NotFound.vue';
 
 Vue.use(VueRouter);
+
+const OBJECT_ID_REGEX = /^[0-9a-fA-F]{24}$/;
 
 const routes = [
     {
@@ -44,6 +53,20 @@ const routes = [
         path: '/users/:userid',
         components: {
             default: UserData
+        }
+    },
+    {
+        path: '/project/:id',
+        components: {
+            default: Project
+        },
+        beforeEnter: (to, from, next) => {
+            if(to.params.id.match(OBJECT_ID_REGEX)) {
+                next();
+            } else {
+                let newId = ObjectID();
+                next({ path: `/project/${newId}` });
+            }
         }
     },
     {
