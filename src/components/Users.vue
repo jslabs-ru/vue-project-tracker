@@ -1,20 +1,29 @@
 <template>
     <div>
-        <div>
+        <b-spinner
+            v-if="isLoading"
+            variant="primary"
+            label="Spinning"
+        ></b-spinner>
+
+        <div v-else>
             <b-table
                 :busy="isLoading"
                 id="my-table"
+                :fields="fields"
                 :items="items"
                 :per-page="perPage"
                 :current-page="currentPage"
                 small
+                sticky-header
                 @row-clicked="onRowClick"
             >
-                <template #table-busy>
-                    <div class="text-center text-danger my-2">
-                        <b-spinner class="align-middle" variant="primary"></b-spinner>
-                    </div>
+                <template #cell(actions)="row">
+                    <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
+                        user json
+                    </b-button>
                 </template>
+
             </b-table>
 
             <b-pagination
@@ -23,6 +32,10 @@
                 :per-page="perPage"
                 aria-controls="my-table"
             ></b-pagination>
+
+            <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
+                <pre>{{ infoModal.content }}</pre>
+            </b-modal>
         </div>
     </div>
 </template>
@@ -36,7 +49,18 @@ export default {
             isLoading: true,
             perPage: 10,
             currentPage: 1,
-            items: []
+            fields: [
+                { key: 'name', label: 'Full Name' },
+                { key: 'username', label: 'Username' },
+                { key: 'email', label: 'Email' },
+                { key: 'actions', label: 'Actions' }
+            ],
+            items: [],
+            infoModal: {
+                id: 'info-modal',
+                title: '',
+                content: ''
+            }
         }
     },
     computed: {
@@ -53,7 +77,16 @@ export default {
     },
     methods: {
         onRowClick (item) {
-            this.$router.push({path: `/users/${item.id}`}, () => {})
+            this.$router.push({path: `/users/${item.id}`}, () => {});
+        },
+        info(item, index, button) {
+            this.infoModal.title = item.name;
+            this.infoModal.content = JSON.stringify(item, null, 2);
+            this.$root.$emit('bv::show::modal', this.infoModal.id, button);
+        },
+        resetInfoModal() {
+            this.infoModal.title = '';
+            this.infoModal.content = '';
         }
     }
 }

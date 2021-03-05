@@ -1,3 +1,7 @@
+.modal-backdrop {
+    opacity:0.5 !important;
+}
+
 .paginator {max-width: 450px;}
 .paginator-item {
 	margin: 3px;
