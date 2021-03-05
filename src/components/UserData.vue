@@ -31,6 +31,7 @@
 import UserService from '@/services/userService';
 
 export default {
+    name: 'UserData',
     data () {
         return {
             isLoading: true,
@@ -46,6 +47,17 @@ export default {
         UserService.getUserAccountData(this.userid)
             .then(user => {
                 this.user = user;
+            })
+            .catch(error => {
+                switch (error.response.status) {
+                    case 404:
+                        this.$error('User not found');
+                        break;
+                    default:
+                        this.$error('Something went wrong');
+                }
+            })
+            .finally(() => {
                 this.isLoading = false;
             })
     }
