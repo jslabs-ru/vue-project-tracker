@@ -1,11 +1,17 @@
 import axios from 'axios';
 
-const USERS_ENDPOINT = '/api/v1/users';
+const USERS_ENDPOINT = '/api/v2/users';
 
 const UserService = {
-    getAll () {
+    getAll (payload = {}) {
+        const { from, to } = payload;
+
+        let url = from && to
+            ?  `${USERS_ENDPOINT}?from=${from}&to=${to}`
+            : USERS_ENDPOINT;
+
         return axios({
-            url: USERS_ENDPOINT
+            url
         }).then(res => {
             return res.data;
         }).catch(error => {
@@ -17,10 +23,7 @@ const UserService = {
         return axios({
             url: `${USERS_ENDPOINT}/${userid}`
         }).then(res => {
-            console.log('res...', res);
             return res.data;
-        }).catch(error => {
-            throw new Error('[UserService getUserAccountData]' + error.message)
         })
     }
 }
