@@ -19,6 +19,16 @@ const UserService = {
         })
     },
 
+    getUsersCount () {
+        return axios({
+            url: USERS_ENDPOINT + '?count=1'
+        }).then(res => {
+            return res.data;
+        }).catch(error => {
+            throw new Error('[UserService getUsersCount]' + error.message)
+        })
+    },
+
     getUserAccountData (userid) {
         return axios({
             url: `${USERS_ENDPOINT}/${userid}`
