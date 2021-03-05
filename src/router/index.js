@@ -22,7 +22,11 @@ const Project = () =>
         '@/components/Project.vue'
     );
 
-import UserData from '@/components/UserData.vue';
+const UserData = () =>
+    import(
+        /* webpackChunkName: "user-data" */
+        '@/components/UserData.vue'
+    );
 
 import NotFound from '@/components/NotFound.vue';
 
