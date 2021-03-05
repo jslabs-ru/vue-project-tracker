@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import { isUndefined, isFinite } from 'lodash';
 import UserService from '@/services/userService';
 
 const COUNT_ON_PAGE = 5;
@@ -117,12 +118,17 @@ export default {
         getUsersData (route) {
             let from, to,
                 { page } = route.query;
-            page = parseInt(page);
-            if(page === 0 || page === 'NaN') {
+
+            if(isUndefined(page)) {
                 page = 0;
             } else {
-                page = page - 1;
+                page = parseInt(page);
+                if(!isFinite(page) || page > this.pagesCount || page <= 0) {
+                    return this.$router.push({ path: '/users' }, () => {});
+                }
             }
+
+            page = page === 0 ? 0 : page - 1;
 
             if(page) {
                 from = page * COUNT_ON_PAGE + 1;
