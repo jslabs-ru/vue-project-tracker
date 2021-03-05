@@ -117,11 +117,16 @@ export default {
         getUsersData (route) {
             let from, to,
                 { page } = route.query;
-            page = page || 0;
+            page = parseInt(page);
+            if(page === 0 || page === 'NaN') {
+                page = 0;
+            } else {
+                page = page - 1;
+            }
 
             if(page) {
                 from = page * COUNT_ON_PAGE + 1;
-                to = page * COUNT_ON_PAGE + COUNT_ON_PAGE;
+                to = (page + 1) * COUNT_ON_PAGE;
             }
 
             UserService.getAll({
