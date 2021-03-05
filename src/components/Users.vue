@@ -19,11 +19,13 @@
                 @row-clicked="onRowClick"
             >
                 <template #cell(actions)="row">
-                    <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
+                    <b-button size="sm"
+                        class="mr-1"
+                        @click="info(row.item, row.index, $event.target)"
+                    >
                         user json
                     </b-button>
                 </template>
-
             </b-table>
 
             <b-pagination
