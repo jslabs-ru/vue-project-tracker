@@ -13,15 +13,11 @@
             class="mb-2"
         >
             <b-card-text>
+                {{ user.username }}
+            </b-card-text>
+
+            <b-card-text>
                 {{ user.email }}
-            </b-card-text>
-
-            <b-card-text>
-                {{ user.phone }}
-            </b-card-text>
-
-            <b-card-text>
-                {{ user.company.name }}
             </b-card-text>
         </b-card>
     </div>

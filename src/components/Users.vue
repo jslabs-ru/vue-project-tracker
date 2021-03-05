@@ -92,7 +92,7 @@ export default {
     },
     methods: {
         onRowClick (item) {
-            this.$router.push({path: `/users/${item.id}`}, () => {});
+            this.$router.push({path: `/users/${item.userid}`}, () => {});
         },
         info (item, index, button) {
             this.infoModal.title = item.name;
