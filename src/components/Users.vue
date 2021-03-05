@@ -28,8 +28,12 @@
                 </template>
             </b-table>
 
-            <div class="overflow-auto">
-                <b-pagination-nav :link-gen="linkGen" :number-of-pages="pagesCount" use-router></b-pagination-nav>
+            <div class="overflow-auto" v-if="pagesCount > 0">
+                <b-pagination-nav
+                    :link-gen="linkGen"
+                    :number-of-pages="pagesCount"
+                    use-router
+                />
             </div>
 
             <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
@@ -92,9 +96,13 @@ export default {
     async created () {
         let usersCount = await UserService.getUsersCount();
 
-        this.pagesCount = Math.ceil(usersCount / COUNT_ON_PAGE);
-
-        this.getUsersData(this.$route);
+        if(!usersCount) {
+            this.$error('No users found');
+            this.isLoading = false;
+        } else {
+            this.pagesCount = Math.ceil(usersCount / COUNT_ON_PAGE);
+            this.getUsersData(this.$route);
+        }
     },
     methods: {
         onRowClick (item) {
@@ -113,7 +121,7 @@ export default {
             this.$bvModal.hide(id);
         },
         linkGen(pageNum) {
-            return pageNum === 1 ? '?' : `?page=${pageNum}`
+            return pageNum === 1 ? '?' : `?page=${pageNum}`;
         },
         getUsersData (route) {
             let from, to,
