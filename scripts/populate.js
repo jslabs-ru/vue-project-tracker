@@ -47,7 +47,7 @@ const USERS_COUNT = 30;
         return knex(USERS).insert({
             userid: ObjectID(),
             name: faker.name.findName(),
-            username: faker.random.word(),
+            username: faker.internet.userName().toLowerCase(),
             email: faker.internet.email()
         })
     }
