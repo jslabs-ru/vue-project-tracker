@@ -28,12 +28,9 @@
                 </template>
             </b-table>
 
-            <b-pagination
-                v-model="currentPage"
-                :total-rows="rows"
-                :per-page="perPage"
-                aria-controls="my-table"
-            ></b-pagination>
+            <div class="overflow-auto">
+                <b-pagination-nav :link-gen="linkGen" :number-of-pages="pagesCount" use-router></b-pagination-nav>
+            </div>
 
             <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
                 <pre>{{ infoModal.content }}</pre>
@@ -58,12 +55,15 @@
 <script>
 import UserService from '@/services/userService';
 
+const COUNT_ON_PAGE = 5;
+
 export default {
     data () {
         return {
             isLoading: true,
-            perPage: 10,
+            perPage: COUNT_ON_PAGE,
             currentPage: 1,
+            pagesCount: 0,
             fields: [
                 { key: 'name', label: 'Full Name' },
                 { key: 'username', label: 'Username' },
@@ -83,12 +83,17 @@ export default {
             return this.items.length
         }
     },
-    created () {
-        UserService.getAll()
-            .then(users => {
-                this.items = users;
-                this.isLoading = false;
-            })
+    watch: {
+        $route (route) {
+            this.getUsersData(route);
+        }
+    },
+    async created () {
+        let usersCount = await UserService.getUsersCount();
+
+        this.pagesCount = Math.ceil(usersCount / COUNT_ON_PAGE);
+
+        this.getUsersData(this.$route);
     },
     methods: {
         onRowClick (item) {
@@ -105,6 +110,27 @@ export default {
         },
         hideModal (id) {
             this.$bvModal.hide(id);
+        },
+        linkGen(pageNum) {
+            return pageNum === 1 ? '?' : `?page=${pageNum}`
+        },
+        getUsersData (route) {
+            let from, to,
+                { page } = route.query;
+            page = page || 0;
+
+            if(page) {
+                from = page * COUNT_ON_PAGE + 1;
+                to = page * COUNT_ON_PAGE + COUNT_ON_PAGE;
+            }
+
+            UserService.getAll({
+                from,
+                to
+            }).then(users => {
+                this.items = users;
+                this.isLoading = false;
+            })
         }
     }
 }
