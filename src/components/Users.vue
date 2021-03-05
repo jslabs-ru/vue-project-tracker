@@ -1,20 +1,21 @@
 <template>
     <div>
-        <b-spinner
-            v-if="isLoading"
-            variant="primary"
-            label="Spinning"
-        ></b-spinner>
-
-        <div v-else>
+        <div>
             <b-table
+                :busy="isLoading"
                 id="my-table"
                 :items="items"
                 :per-page="perPage"
                 :current-page="currentPage"
                 small
                 @row-clicked="onRowClick"
-            ></b-table>
+            >
+                <template #table-busy>
+                    <div class="text-center text-danger my-2">
+                        <b-spinner class="align-middle" variant="primary"></b-spinner>
+                    </div>
+                </template>
+            </b-table>
 
             <b-pagination
                 v-model="currentPage"
