@@ -35,6 +35,17 @@ const UserService = {
         }).then(res => {
             return res.data;
         })
+    },
+
+    deleteUserAccount (userid) {
+        return axios({
+            url: `${USERS_ENDPOINT}/${userid}`,
+            method: 'delete'
+        }).then(res => {
+            return res.data;
+        }).catch(error => {
+            throw new Error('[UserService deleteUserAccount]' + error.message)
+        })
     }
 }
 
