@@ -14,7 +14,7 @@ const TASKS = 'tasks';
 const TASKS_COUNT = 100;
 
 const USERS = 'users';
-const USERS_COUNT = 30;
+const USERS_COUNT = 32;
 
 (async function() {
     await knex.schema.dropTableIfExists(TASKS);
