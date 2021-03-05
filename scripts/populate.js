@@ -1,21 +1,70 @@
+const when = require('when');
 const faker = require('faker');
-const jsonfile = require('jsonfile');
-const path = require('path');
+const ObjectID = require('bson-objectid');
 
-var tasks = [];
+const knex = require('knex')({
+    client: 'sqlite3',
+    connection: {
+        filename: './data/data.db',
+    },
+    useNullAsDefault: true
+});
 
-var i = 0;
-while (i < 1000) {
-    var description = faker.lorem.words();
-    var user = faker.name.findName();
-    tasks.push({
-        index: i,
-        description,
-        user
-    })
-    i++;
-}
+const TASKS = 'tasks';
+const TASKS_COUNT = 100;
 
-jsonfile.writeFile(path.resolve(__dirname, '..', 'data', 'data.json'), tasks, function (err) {
-    if (err) console.error(err)
-})
+const USERS = 'users';
+const USERS_COUNT = 30;
+
+(async function() {
+    await knex.schema.dropTableIfExists(TASKS);
+    await knex.schema.dropTableIfExists(USERS);
+
+    await knex.schema.createTable(TASKS, function(table) {
+        table.increments();
+        table.string('description').notNullable();
+        table.timestamp('created_at').defaultTo(knex.fn.now())
+        table.timestamp('updated_at').defaultTo(knex.fn.now())
+    });
+
+    await knex.schema.createTable(USERS, function(table) {
+        table.increments();
+        table.string('userid').notNullable();
+        table.string('name').notNullable();
+        table.string('username').notNullable();
+        table.string('email').notNullable();
+        table.timestamp('created_at').defaultTo(knex.fn.now());
+        table.timestamp('updated_at').defaultTo(knex.fn.now());
+    });
+
+    function insertTask(index) {
+        return knex(TASKS).insert({
+            description: faker.lorem.words()
+        })
+    }
+
+    function insertUser(index) {
+        return knex(USERS).insert({
+            userid: ObjectID(),
+            name: faker.name.findName(),
+            username: faker.random.word(),
+            email: faker.internet.email()
+        })
+    }
+
+    await when.iterate(
+        index => index + 1,
+        index => index === TASKS_COUNT,
+        insertTask,
+        0
+    );
+
+    await when.iterate(
+        index => index + 1,
+        index => index === USERS_COUNT,
+        insertUser,
+        0
+    );
+
+    process.exit();
+})()
