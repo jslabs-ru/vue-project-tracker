@@ -25,7 +25,7 @@ const TaskService = {
         }).then(res => {
             return res.data;
         }).catch(error => {
-            throw new Error('[getTasksCount getAll]' + error.message)
+            throw new Error('[TaskService getAll]' + error.message)
         })
     },
 }
