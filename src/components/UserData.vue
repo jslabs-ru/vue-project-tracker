@@ -82,9 +82,10 @@ export default {
             if (window.confirm(CONFIRMATION_DELETE_MESSAGE)) {
                 UserService.deleteUserAccount(this.userid)
                     .then(res => {
-                        let timer = 5;
                         this.isDeleted = true;
+                        
                         let vm = this;
+                        let timer = 5;
 
                         let countDownInterval = setInterval(function traceMessage() {
                             if(timer === 0) {
