@@ -7,8 +7,7 @@
     "serve": "npm run dev-service",
     "dev-service": "vue-cli-service --port 8081 serve",
     "dev-api-server": "PORT=3001 nodemon ./server",
-    "populate": "node ./scripts/populate",
-    "populate-tasks": "node ./scripts/populateTasks"
+    "populate": "node ./scripts/populate"
   },
   "keywords": [],
   "author": "",
