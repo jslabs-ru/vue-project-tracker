@@ -35,6 +35,19 @@
 
             <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
                 <pre>{{ infoModal.content }}</pre>
+                <template #modal-footer>
+                    <div class="w-100">
+                        <p class="float-left">Modal Footer Content</p>
+                        <b-button
+                            variant="primary"
+                            size="sm"
+                            class="float-right"
+                            @click="hideModal(infoModal.id)"
+                        >
+                            Close
+                        </b-button>
+                    </div>
+                </template>
             </b-modal>
         </div>
     </div>
@@ -79,14 +92,17 @@ export default {
         onRowClick (item) {
             this.$router.push({path: `/users/${item.id}`}, () => {});
         },
-        info(item, index, button) {
+        info (item, index, button) {
             this.infoModal.title = item.name;
             this.infoModal.content = JSON.stringify(item, null, 2);
-            this.$root.$emit('bv::show::modal', this.infoModal.id, button);
+            this.$bvModal.show(this.infoModal.id, button);
         },
-        resetInfoModal() {
+        resetInfoModal () {
             this.infoModal.title = '';
             this.infoModal.content = '';
+        },
+        hideModal (id) {
+            this.$bvModal.hide(id);
         }
     }
 }
