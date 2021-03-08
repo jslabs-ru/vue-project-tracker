@@ -17,6 +17,12 @@ Vue.use(Vuelidate);
 Vue.use(EventBus);
 Vue.use(MessagesPanel);
 
+Vue.directive('focus', {
+    inserted: function (el) {
+        el.focus();
+    }
+})
+
 new Vue({
     render: (h) => h(App),
     components: { App },
