@@ -12,12 +12,13 @@ function createApiRouter(app) {
 
     router.get('/tasks', async function(req, res) {
         let result,
-            { from = 0, to = 10, count } = req.query;
+            { from = 0, to = 10, count, token } = req.query;
         count = parseInt(count);
 
         const db = app.get('db');
-
-        if(count === 1) {
+        if(token && token.length > 0) {
+            result = await db(TASKS).where('description', 'like', `%${token}%`);
+        } else if(count === 1) {
             result = await db(TASKS).count();
             result = result[0]['count(*)'];
         } else {
