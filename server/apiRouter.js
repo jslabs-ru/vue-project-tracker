@@ -17,7 +17,7 @@ function createApiRouter(app) {
 
         const db = app.get('db');
         if(token && token.length > 0) {
-            result = await db(TASKS).where('description', 'like', `%${token}%`);
+            result = await db(TASKS).where('description', 'like', `%${token}%`).limit(10);
         } else if(count === 1) {
             result = await db(TASKS).count();
             result = result[0]['count(*)'];
