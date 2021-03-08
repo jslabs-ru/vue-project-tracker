@@ -19,6 +19,18 @@ const TaskService = {
         })
     },
 
+    getTasksByToken (token = '') {
+        if(!token.length) return new Promise((resolve) => resolve([]));
+
+        return axios({
+            url: `${TASKS_ENDPOINT}?token=${token}`
+        }).then(res => {
+            return res.data;
+        }).catch(error => {
+            throw new Error('[TaskService getTasksByToken]' + error.message)
+        })
+    },
+
     getTasksCount () {
         return axios({
             url: TASKS_ENDPOINT + '?count=1'
