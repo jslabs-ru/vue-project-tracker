@@ -89,8 +89,11 @@ export default {
         }
     },
     watch: {
-        $route (route) {
-            this.getUsersData(route);
+        $route: {
+            handler: function(route) {
+                this.getUsersData(route);
+            },
+            immediate: true
         }
     },
     async created () {
@@ -101,7 +104,6 @@ export default {
             this.isLoading = false;
         } else {
             this.pagesCount = Math.ceil(usersCount / COUNT_ON_PAGE);
-            this.getUsersData(this.$route);
         }
     },
     methods: {
