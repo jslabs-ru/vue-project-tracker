@@ -1,6 +1,7 @@
 <template>
     <div class="autocomplete-root">
         <input ref="autocomplete-input"
+            v-focus
             id="autocomplete-input"
             type="text"
             class="form-control"
@@ -72,9 +73,6 @@ export default {
             this.autocompleteInputModel = item;
             this.$emit('task-selected', item);
             this.selected = true;
-            this.resetList();
-        },
-        resetList () {
             this.autocompleteList = [];
         },
         onUp () {
