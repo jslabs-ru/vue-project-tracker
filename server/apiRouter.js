@@ -4,6 +4,8 @@ const bodyParser = require('body-parser');
 const TASKS = 'tasks';
 const USERS = 'users';
 
+const DELIMITER = ',';
+
 function createApiRouter(app) {
     const router = express.Router();
 
@@ -12,11 +14,14 @@ function createApiRouter(app) {
 
     router.get('/tasks', async function(req, res) {
         let result,
-            { from = 0, to = 10, count, token } = req.query;
+            { from = 0, to = 10, count, token, ids } = req.query;
         count = parseInt(count);
 
         const db = app.get('db');
-        if(token && token.length > 0) {
+        if(ids && ids.length > 0) {
+            ids = ids.split(DELIMITER);
+            result = await db(TASKS).whereIn('id', ids);
+        } else if(token && token.length > 0) {
             result = await db(TASKS).where('description', 'like', `%${token}%`).limit(10);
         } else if(count === 1) {
             result = await db(TASKS).count();
@@ -26,6 +31,23 @@ function createApiRouter(app) {
         }
 
         res.json(result);
+    });
+
+    router.get('/tasks/:id', async function(req, res) {
+        let result;
+
+        const db = app.get('db');
+        const { id } = req.params;
+
+        const tasks = await db(TASKS).where('id', id);
+
+        if(tasks.length) {
+            res.status(200).json(tasks[0]);
+        } else {
+            res.status(404).json({
+                error: 'Not found'
+            });
+        }
     });
 
     router.get('/users', async function(req, res) {
@@ -71,6 +93,23 @@ function createApiRouter(app) {
         await db(USERS)
             .where('userid', userid)
             .update(userData);
+
+        res.status(200).json({
+            ok: 1
+        });
+    })
+
+    router.post('/users/:userid/tasks', async function(req, res) {
+        const db = app.get('db');
+        const { userid } = req.params;
+
+        const tasks = req.body;
+
+        await db(USERS)
+            .where('userid', userid)
+            .update({
+                tasks: JSON.stringify(tasks)
+            });
 
         res.status(200).json({
             ok: 1
