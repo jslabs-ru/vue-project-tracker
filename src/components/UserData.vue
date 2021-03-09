@@ -106,9 +106,7 @@ export default {
                 userid: this.userid,
                 tasks: tasks.map(item => item.id)
             }
-            UserService.saveUserTasks(payload).then(res => {
-                console.log('TASKS ADDED:', res);
-            });
+            UserService.saveUserTasks(payload);
         }
     },
     computed: {
