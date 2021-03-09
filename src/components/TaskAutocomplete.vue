@@ -19,6 +19,7 @@
 </template>
 
 <script>
+/* TODO: delete example component */
 
 import Autocomplete from '@/components/autocomplete/Autocomplete';
 import TaskService from '@/services/taskService';
