@@ -3,6 +3,7 @@ import VueRouter from 'vue-router';
 import ObjectID from 'bson-objectid';
 
 import Main from '@/components/Main.vue';
+import TaskAutocomplete from '@/components/TaskAutocomplete.vue';
 
 const Tasks = () =>
     import(
@@ -45,6 +46,12 @@ const routes = [
         path: '/tasks',
         components: {
             default: Tasks
+        }
+    },
+    {
+        path: '/tasks/autocomplete',
+        components: {
+            default: TaskAutocomplete
         }
     },
     {
