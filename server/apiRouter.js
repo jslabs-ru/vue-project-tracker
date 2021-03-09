@@ -116,6 +116,45 @@ function createApiRouter(app) {
         });
     })
 
+    router.delete('/users/:userid/tasks/:taskId', async function(req, res) {
+        const db = app.get('db');
+        const { userid, taskId } = req.params;
+
+        let user = await db(USERS)
+            .where('userid', userid);
+
+        if(user.length) {
+            user = user[0];
+
+            let tasks = user.tasks;
+
+            tasks = JSON.parse(tasks);
+            let taskIndex = tasks.indexOf(parseInt(taskId));
+
+            if(taskIndex >= 0) {
+                let deletedTaskId = tasks.splice(taskIndex, 1); /* returns array of deleted items */
+
+                await db(USERS)
+                    .where('userid', userid)
+                    .update({
+                        tasks: JSON.stringify(tasks)
+                    });
+
+                res.status(200).json({
+                    deletedTaskId: deletedTaskId[0],
+                    deletedTaskIndex: taskIndex,
+                    ok: 1 /* item deleted */
+                });
+            } else {
+                res.status(200).json({
+                    ok: 0 /* item not deleted */
+                });
+            }
+        } else {
+            res.status(404).json('User not found');
+        }
+    })
+
     router.delete('/users/:userid', async function(req, res) {
         const db = app.get('db');
         const { userid } = req.params;
