@@ -48,6 +48,16 @@ const UserService = {
         })
     },
 
+    deleteUserTask (payload) {
+        let { userid, taskId } = payload;
+        return axios({
+            url: `${USERS_ENDPOINT}/${userid}/tasks/${taskId}`,
+            method: 'delete'
+        }).then(res => {
+            return res.data;
+        })
+    },
+
     deleteUserAccount (userid) {
         return axios({
             url: `${USERS_ENDPOINT}/${userid}`,
