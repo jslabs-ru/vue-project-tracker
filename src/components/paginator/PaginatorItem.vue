@@ -17,11 +17,6 @@ export default {
         isActive () {
             return this.activePage === this.page;
         },
-    },
-    methods: {
-        onPageClick (page) {
-
-        }
     }
 }
 </script>
