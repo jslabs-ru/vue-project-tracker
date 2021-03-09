@@ -33,6 +33,7 @@ const USERS_COUNT = 32;
         table.string('name').notNullable();
         table.string('username').notNullable();
         table.string('email').notNullable();
+        table.string('tasks').notNullable();
         table.timestamp('created_at').defaultTo(knex.fn.now());
         table.timestamp('updated_at').defaultTo(knex.fn.now());
     });
@@ -48,7 +49,8 @@ const USERS_COUNT = 32;
             userid: ObjectID(),
             name: faker.name.findName(),
             username: faker.internet.userName().toLowerCase(),
-            email: faker.internet.email()
+            email: faker.internet.email(),
+            tasks: JSON.stringify([])
         })
     }
 
