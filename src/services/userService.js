@@ -37,6 +37,17 @@ const UserService = {
         })
     },
 
+    saveUserTasks (payload) {
+        let { userid, tasks } = payload;
+        return axios({
+            url: `${USERS_ENDPOINT}/${userid}/tasks`,
+            data: tasks,
+            method: 'post'
+        }).then(res => {
+            return res.data;
+        })
+    },
+
     deleteUserAccount (userid) {
         return axios({
             url: `${USERS_ENDPOINT}/${userid}`,
