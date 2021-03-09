@@ -46,6 +46,9 @@
                             :key="index"
                         >
                             <span>{{ item.description }}</span>
+                            <span class="delete-task"
+                                @click="deleteUserTask(item)"
+                            >x</span>
                         </li>
                     </ul>
                 </div>
@@ -119,8 +122,11 @@ export default {
                 this.user = user;
 
                 if(user.tasks) {
-                    let userTasks = await TaskService.getTasksByIds(JSON.parse(user.tasks));
-                    this.userTasks = userTasks;
+                    let tasks = JSON.parse(user.tasks);
+                    if(tasks.length > 0) {
+                        let userTasks = await TaskService.getTasksByIds(tasks);
+                        this.userTasks = userTasks;
+                    }
                 }
             })
             .catch(error => {
@@ -162,6 +168,19 @@ export default {
                     })
             }
         },
+        deleteUserTask (item) {
+            UserService.deleteUserTask({
+                userid: this.userid,
+                taskId: item.id
+            }).then(res => {
+                let deletedTaskId = res.deletedTaskId;
+
+                if(deletedTaskId === item.id) {
+                    let index = this.userTasks.findIndex(task => item.id === task.id);
+                    this.userTasks.splice(index, 1); /* or use res.deletedTaskIndex */
+                }
+            })
+        },
         onTaskSelected (task) {
             if(!task) return;
 
@@ -174,3 +193,11 @@ export default {
     }
 }
 </script>
+
+<style>
+.delete-task {
+    color: red;
+    cursor: pointer;
+    margin-left: 15px;
+}
+</style>
