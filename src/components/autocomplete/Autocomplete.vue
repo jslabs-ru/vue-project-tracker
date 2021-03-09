@@ -22,7 +22,7 @@
                     :key="index"
                     :class="{'active-autocomplete-list-item': positionInList === index}"
                     @click="onSelect(item)"
-                ><span>{{ item }}</span></li>
+                ><span>{{ renderListItem(item) }}</span></li>
             </ul>
         </div>
     </div>
@@ -41,6 +41,9 @@ export default {
             autocompleteInputModel: ''
         }
     },
+    created () {
+        this.debouncedApiRequest = debounce(this.apiRequest, 100);
+    },
     props: {
         serviceMethod: {
             type: Function,
@@ -48,11 +51,18 @@ export default {
         },
         resultToListMappingMethod: {
             type: Function,
+            default: function(res) {
+                return res.map(item => item);
+            },
+        },
+        renderListItem: {
+            type: Function,
+            required: true
+        },
+        setAutocompleteInputModel: {
+            type: Function,
             required: true
         }
-    },
-    created () {
-        this.debouncedApiRequest = debounce(this.apiRequest, 100);
     },
     methods: {
         apiRequest (event) {
@@ -70,7 +80,7 @@ export default {
                 })
         },
         onSelect (item) {
-            this.autocompleteInputModel = item;
+            this.autocompleteInputModel = this.setAutocompleteInputModel(item);
             this.$emit('autocomplete-selected', item);
             this.selected = true;
             this.autocompleteList = [];
