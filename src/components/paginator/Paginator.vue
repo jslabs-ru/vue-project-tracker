@@ -18,12 +18,8 @@ export default {
     components: {
         PaginatorItem
     },
-    data () {
-        return {
-            activePage: 1
-        }
-    },
     props: {
+        activePage: {type: Number},
         pagesCount: {type: Number}
     },
     computed: {
