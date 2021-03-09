@@ -5,7 +5,8 @@
             <Autocomplete
                 id="task-autocomplete"
                 :serviceMethod="serviceMethod"
-                :resultToListMappingMethod="resultToListMappingMethod"
+                :setAutocompleteInputModel="setAutocompleteInputModel"
+                :renderListItem="renderListItem"
                 @autocomplete-selected="onTaskSelected"
                 @autocomplete-not-selected="onTaskNotSelect"
             />
@@ -33,8 +34,11 @@ export default {
         return {
             task: null,
             serviceMethod: TaskService.getTasksByToken,
-            resultToListMappingMethod: function(res) {
-                return map(res, item => item.description);
+            renderListItem: function(item) {
+                return item && item.description;
+            },
+            setAutocompleteInputModel: function(item) {
+                return item && item.description;
             }
         }
     },

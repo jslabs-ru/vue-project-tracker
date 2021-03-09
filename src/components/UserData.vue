@@ -39,8 +39,8 @@
                         />
                     </div>
 
-                <div class="cell">
-                    <ul>
+                <div class="cel">
+                    <ul class="user-tasks-list" :class="{'card': userTasks.length > 0}">
                         <li
                             v-for="(item, index) in userTasks"
                             :key="index"
@@ -196,6 +196,10 @@ export default {
 .delete-task {
     color: red;
     cursor: pointer;
+    margin-left: 15px;
+    margin-right: 15px;
+}
+.user-tasks-list {
     margin-left: 15px;
 }
 </style>
