@@ -40,17 +40,7 @@ export default {
             selected: false,
             positionInList: 0,
             autocompleteList: [],
-            currentText: ''
-        }
-    },
-    computed: {
-        autocompleteInputModel: {
-            get () {
-                return this.currentText;
-            },
-            set (val) {
-                this.currentText = val;
-            }
+            autocompleteInputModel: ''
         }
     },
     created () {
