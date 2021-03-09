@@ -1,6 +1,9 @@
 import axios from 'axios';
+import { isArray } from 'lodash';
 
 const TASKS_ENDPOINT = '/api/v2/tasks';
+
+const DELIMITER = ',';
 
 const TaskService = {
     getAll (payload = {}) {
@@ -16,6 +19,29 @@ const TaskService = {
             return res.data;
         }).catch(error => {
             throw new Error('[TaskService getAll]' + error.message)
+        })
+    },
+
+    getTasksByIds (ids) {
+        if(!isArray(ids)) {
+            throw new Error('[TaskService getTasksByIds] Param ids should be Array');
+        }
+        return axios({
+            url: `${TASKS_ENDPOINT}?ids=${ids.join(DELIMITER)}`
+        }).then(res => {
+            return res.data;
+        }).catch(error => {
+            throw new Error('[TaskService getTasksByIds]' + error.message)
+        })
+    },
+
+    getTaskById (id) {
+        return axios({
+            url: `${TASKS_ENDPOINT}/${id}`
+        }).then(res => {
+            return res.data;
+        }).catch(error => {
+            throw new Error('[TaskService getTaskById]' + error.message)
         })
     },
 
