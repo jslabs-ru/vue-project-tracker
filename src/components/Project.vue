@@ -4,7 +4,7 @@
             @submit.prevent="onSave"
         >
                 <div class="form-group">
-                    <label for="project-name">Project name <span>{{ projectTimestamp }}</span></label>
+                    <label for="project-name">Project timestamp: <span class="red">{{ projectTimestamp }}</span></label>
                     <input
                         type="text"
                         class="form-control"
@@ -12,8 +12,16 @@
                         autocomplete="off"
                         v-model="projectName"
                     />
-                    <div class="alert alert-danger" role="alert" v-if="!$v.projectName.required">Name should not be empty</div>
-                    <div class="alert alert-danger" role="alert" v-if="!$v.projectName.minLength">Name length should be at least {{ defaultNameLength }}</div>
+                    <div
+                        class="alert alert-danger"
+                        role="alert"
+                        v-if="!$v.projectName.required"
+                    >Name should not be empty</div>
+                    <div
+                        class="alert alert-danger"
+                        role="alert"
+                        v-if="!$v.projectName.minLength"
+                    >Name length should be at least {{ defaultNameLength }}</div>
                 </div>
 
                 <datepicker

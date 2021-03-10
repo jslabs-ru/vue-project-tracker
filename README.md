@@ -2,7 +2,7 @@
 ```npm install```
 
 ## Populate filesystem database:
-```npm run populate-tasks```
+```npm run populate```
 
 ## Run api server:
 ```npm run dev-api-server```
