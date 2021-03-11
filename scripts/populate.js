@@ -42,6 +42,7 @@ function getRandomTasks() {
         table.increments();
         table.string('name').notNullable();
         table.string('description').notNullable();
+        table.string('logo').notNullable();
         table.timestamp('created_at').defaultTo(knex.fn.now())
         table.timestamp('updated_at').defaultTo(knex.fn.now())
     });
@@ -67,7 +68,8 @@ function getRandomTasks() {
     function insertProject(index) {
         return knex(PROJECTS).insert({
             name: faker.music.genre(),
-            description: faker.lorem.words()
+            description: faker.lorem.words(),
+            logo: ''
         })
     }
 
