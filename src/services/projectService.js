@@ -11,6 +11,18 @@ const ProjectService = {
         }).catch(error => {
             throw new Error('[ProjectService getAll]' + error.message)
         })
+    },
+
+    createProject (data) {
+        return axios({
+            url: PROJECTS_ENDPOINT,
+            method: 'post',
+            data
+        }).then(res => {
+            return res.data;
+        }).catch(error => {
+            throw new Error('[ProjectService createProject]' + error.message)
+        })
     }
 }
 
