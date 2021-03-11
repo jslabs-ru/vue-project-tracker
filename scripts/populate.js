@@ -10,11 +10,28 @@ const knex = require('knex')({
     useNullAsDefault: true
 });
 
+const PROJECTS = 'tasks';
+const PROJECTS_COUNT = 3;
+
 const TASKS = 'tasks';
 const TASKS_COUNT = 100;
 
 const USERS = 'users';
 const USERS_COUNT = 32;
+
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+function getRandomTasks() {
+    var tasksCount = getRandomInt(0, 5);
+    var tasks = [];
+    for (var i = 0; i < tasksCount; i++) {
+        var taskId = getRandomInt(1, TASKS_COUNT);
+        if(!tasks.includes(taskId)) tasks.push(taskId);
+    }
+    return tasks;
+}
 
 (async function() {
     await knex.schema.dropTableIfExists(TASKS);
@@ -50,7 +67,7 @@ const USERS_COUNT = 32;
             name: faker.name.findName(),
             username: faker.internet.userName().toLowerCase(),
             email: faker.internet.email(),
-            tasks: JSON.stringify([])
+            tasks: JSON.stringify(getRandomTasks())
         })
     }
 
