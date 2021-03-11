@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 
+const PROJECTS = 'projects';
 const TASKS = 'tasks';
 const USERS = 'users';
 
@@ -11,6 +12,22 @@ function createApiRouter(app) {
 
     router.use(bodyParser.json());
     router.use(bodyParser.urlencoded({ extended: true }));
+
+    router.get('/projects', async function(req, res) {
+        let result,
+            { from = 0, to = 10, count } = req.query;
+        count = parseInt(count);
+
+        const db = app.get('db');
+        if(count === 1) {
+            result = await db(PROJECTS).count();
+            result = result[0]['count(*)'];
+        } else {
+            result = await db(PROJECTS).whereBetween('id', [from, to]);
+        }
+
+        res.json(result);
+    });
 
     router.get('/tasks', async function(req, res) {
         let result,
