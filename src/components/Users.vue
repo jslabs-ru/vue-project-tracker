@@ -1,57 +1,75 @@
 <template>
-    <div>
-        <b-spinner
-            v-if="isLoading"
-            variant="primary"
-            label="Spinning"
-        ></b-spinner>
+    <div class="root-page container">
+        <div class="row">
+            <div class="cell">
+                <b-spinner
+                    v-if="isLoading"
+                    variant="primary"
+                    label="Spinning"
+                ></b-spinner>
 
-        <div v-else>
-            <b-table
-                :busy="isLoading"
-                id="my-table"
-                :fields="fields"
-                :items="items"
-                :per-page="perPage"
-                :current-page="currentPage"
-                small
-                sticky-header
-                @row-clicked="onRowClick"
-            >
-                <template #cell(actions)="row">
-                    <b-button size="sm"
-                        class="mr-1"
-                        @click="info(row.item, row.index, $event.target)"
+                <div v-else>
+                    <b-table
+                        :busy="isLoading"
+                        id="my-table"
+                        :fields="fields"
+                        :items="items"
+                        :per-page="perPage"
+                        :current-page="currentPage"
+                        small
+                        bordered
+                        :table-variant="tableVariant"
+                        sticky-header
+                        @row-clicked="onRowClick"
                     >
-                        user json
-                    </b-button>
-                </template>
-            </b-table>
+                        <template #cell(actions)="row">
+                            <b-button size="sm"
+                                class="mr-1"
+                                @click="info(row.item, row.index, $event.target)"
+                            >
+                                user json
+                            </b-button>
+                        </template>
+                    </b-table>
 
-            <div class="overflow-auto" v-if="pagesCount > 0">
-                <b-pagination-nav
-                    :link-gen="linkGen"
-                    :number-of-pages="pagesCount"
-                    use-router
-                />
-            </div>
-
-            <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
-                <pre>{{ infoModal.content }}</pre>
-                <template #modal-footer>
-                    <div class="w-100">
-                        <p class="float-left">Modal Footer Content</p>
-                        <b-button
-                            variant="primary"
-                            size="sm"
-                            class="float-right"
-                            @click="hideModal(infoModal.id)"
-                        >
-                            Close
-                        </b-button>
+                    <div class="overflow-auto" v-if="pagesCount > 0">
+                        <b-pagination-nav
+                            :link-gen="linkGen"
+                            :number-of-pages="pagesCount"
+                            use-router
+                        />
                     </div>
-                </template>
-            </b-modal>
+
+                    <b-form-group label="Table Variant" label-for="table-style-variant" label-cols-lg="2">
+                        <b-form-select
+                            id="table-style-variant"
+                            v-model="tableVariant"
+                            :options="tableVariants"
+                        >
+                            <template #first>
+                                <option value="">-- None --</option>
+                            </template>
+                        </b-form-select>
+                    </b-form-group>
+
+                    <b-modal :id="infoModal.id" :title="infoModal.title" ok-only @hide="resetInfoModal">
+                        <pre>{{ infoModal.content }}</pre>
+                        <template #modal-footer>
+                            <div class="w-100">
+                                <p class="float-left">Modal Footer Content</p>
+                                <b-button
+                                    variant="primary"
+                                    size="sm"
+                                    class="float-right"
+                                    @click="hideModal(infoModal.id)"
+                                >
+                                    Close
+                                </b-button>
+                            </div>
+                        </template>
+                    </b-modal>
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -80,7 +98,14 @@ export default {
                 id: 'info-modal',
                 title: '',
                 content: ''
-            }
+            },
+            tableVariant: '',
+            tableVariants: [
+                'primary',
+                'secondary',
+                'light',
+                'dark'
+            ]
         }
     },
     computed: {
