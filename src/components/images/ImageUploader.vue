@@ -1,24 +1,26 @@
 <template>
-    <div class="uploader-root">
-        <form
-            class="uploader-form"
-            enctype="multipart/form-data"
-            novalidate
-        >
-            <b-spinner v-if="isUploading" variant="success" label="Spinning"></b-spinner>
-            <label v-else class="btn btn-outline-primary">
-                {{ loadBtnText }}
-                <input
-                    :name="uploadFieldName"
-                    @click="onClick($event)"
-                    @change="onChange($event.target.files)"
-                    type="file"
-                    :accept="accept"
-                    class="images-upload-input"
-                />
+    <form
+        class="uploader-form"
+        enctype="multipart/form-data"
+        novalidate
+    >
+        <b-spinner v-if="isUploading"
+            variant="success"
+            label="Spinning">
+        </b-spinner>
+
+        <label v-else class="btn btn-outline-primary">
+            {{ loadBtnText }}
+            <input
+                :name="uploadFieldName"
+                @click="onClick($event)"
+                @change="onChange($event.target.files)"
+                type="file"
+                :accept="accept"
+                class="images-upload-input"
+            />
         </label>
-        </form>
-    </div>
+    </form>
 </template>
 
 <script>
@@ -37,7 +39,6 @@ export default {
         return {
             files: [],
             accept: 'image/jpeg, image/png, image/gif',
-            imagesCount: 0,
             isUploading: false
         }
     },
@@ -73,14 +74,12 @@ export default {
     methods: {
         onChange (files) {
             if (!files.length) return;
-            this.imagesCount = files.length;
-            this.files = files;
-
             const file = files[0];
 
-            this.isUploading = false;
+            this.isUploading = true;
 
             this.resizeImageAndConvertToBase64(file).then(base64 => {
+                this.isUploading = false;
                 this.$emit('image-uploaded', {
                     num: this.num,
                     base64
