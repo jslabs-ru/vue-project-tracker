@@ -13,7 +13,6 @@
             {{ loadBtnText }}
             <input
                 :name="uploadFieldName"
-                @click="onClick($event)"
                 @change="onChange($event.target.files)"
                 type="file"
                 :accept="accept"
@@ -104,9 +103,6 @@ export default {
                     });
                 };
             })
-        },
-        onClick (e) {
-            this.$emit('click', e);
         }
     }
 }
