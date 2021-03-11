@@ -25,5 +25,18 @@ export default {
                 alertElement.textContent = message;
             }
         }
+
+        Vue.prototype.warning = function (message) {
+            let alertElement = this.$el.querySelector('.alert-warning');
+            if(!alertElement) {
+                alertElement = document.createElement('div');
+                const alertClasses = ['alert', 'alert-warning'];
+                alertElement.classList.add(...alertClasses);
+                alertElement.textContent = message;
+                this.$el.appendChild(alertElement);
+            } else {
+                alertElement.textContent = message;
+            }
+        }
     }
 }
