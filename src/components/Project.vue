@@ -53,6 +53,8 @@
                     >Date should not be in future</div>
                 </div>
 
+                <div>{{ submitStatus }}</div>
+
                 <button
                     type="submit"
                     class="btn btn-primary"
@@ -77,6 +79,7 @@ export default {
             projectName: '',
             projectDate: '',
             projectTimestamp: null,
+            submitStatus: ''
         }
     },
     components: {
@@ -110,10 +113,18 @@ export default {
             this.projectTimestamp = this.toUnixTimestamp(val);
         },
         onSave () {
-            this.$v.projectName.$touch();
-            this.$v.projectDate.$touch();
+            this.$v.$touch();
 
-            console.log(this.$v.projectName.$model, this.$v.projectDate.$model);
+            if (this.$v.$invalid) {
+                this.submitStatus = 'ERROR'
+            } else {
+                this.submitStatus = 'PENDING'
+                setTimeout(() => {
+                    this.submitStatus = 'OK'
+                }, 500)
+            }
+
+            // console.log(this.$v.projectName.$model, this.$v.projectDate.$model);
         }
     }
 }
