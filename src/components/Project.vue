@@ -12,16 +12,18 @@
                         autocomplete="off"
                         v-model="projectName"
                     />
-                    <div
-                        class="alert alert-danger"
-                        role="alert"
-                        v-if="!$v.projectName.required"
-                    >Name should not be empty</div>
-                    <div
-                        class="alert alert-danger"
-                        role="alert"
-                        v-if="!$v.projectName.minLength"
-                    >Name length should be at least {{ defaultNameLength }}</div>
+                    <div>
+                        <div
+                            class="alert alert-danger"
+                            role="alert"
+                            v-if="!$v.projectName.required"
+                        >Name should not be empty</div>
+                        <div
+                            class="alert alert-danger"
+                            role="alert"
+                            v-if="!$v.projectName.minLength"
+                        >Name length should be at least {{ defaultNameLength }}</div>
+                    </div>
                 </div>
 
                 <datepicker

@@ -1,7 +1,7 @@
 <template>
-    <div class="root-page container">
+    <div class="root-page">
         <div class="row">
-            <div class="cell">
+            <div class="col">
                 <b-spinner
                     v-if="isLoading"
                     variant="primary"
@@ -14,11 +14,18 @@
                     :fields="fields"
                     :items="items"
                     @row-clicked="onRowClick"
+                    bordered
                 >
                 </b-table>
+
+                <button
+                    type="submit"
+                    class="btn btn-primary"
+                    @click="createProject"
+                >Create new project</button>
             </div>
-            <div class="cell">
-                Current Project
+            <div class="col">
+                <RouterView name="project" />
             </div>
         </div>
     </div>
@@ -52,6 +59,9 @@ export default {
     methods: {
         onRowClick (item) {
             this.$router.push({path: `/users/${item.userid}`}, () => {});
+        },
+        createProject () {
+            this.$router.push({path: '/projects/create'}, () => {})
         }
     }
 }

@@ -1,7 +1,7 @@
 <template>
-    <div class="root-page container">
+    <div class="root-page">
         <div class="row">
-            <div class="cell">
+            <div class="col">
                 <b-spinner
                     v-if="isLoading"
                     variant="primary"
