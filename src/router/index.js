@@ -1,41 +1,18 @@
 import Vue from 'vue';
+import { union } from 'lodash';
 import VueRouter from 'vue-router';
-import ObjectID from 'bson-objectid';
+
+import projectsRoutes from '@/router/projects';
+import usersRoutes from '@/router/users';
+import tasksRoutes from '@/router/tasks';
 
 import Main from '@/components/Main.vue';
-import TaskAutocomplete from '@/components/TaskAutocomplete.vue';
-
-const Tasks = () =>
-    import(
-        /* webpackChunkName: "tasks" */
-        '@/components/Tasks.vue'
-    );
-
-const Users = () =>
-    import(
-        /* webpackChunkName: "users" */
-        '@/components/Users.vue'
-    );
-
-const Project = () =>
-    import(
-        /* webpackChunkName: "project" */
-        '@/components/Project.vue'
-    );
-
-const UserData = () =>
-    import(
-        /* webpackChunkName: "user-data" */
-        '@/components/UserData.vue'
-    );
 
 import NotFound from '@/components/NotFound.vue';
 
 Vue.use(VueRouter);
 
-const OBJECT_ID_REGEX = /^[0-9a-fA-F]{24}$/;
-
-const routes = [
+const baseRoutes = [
     {
         path: '/',
         components: {
@@ -43,48 +20,17 @@ const routes = [
         }
     },
     {
-        path: '/tasks',
-        components: {
-            default: Tasks
-        }
-    },
-    {
-        path: '/tasks/autocomplete',
-        components: {
-            default: TaskAutocomplete
-        }
-    },
-    {
-        path: '/users',
-        components: {
-            default: Users
-        }
-    },
-    {
-        path: '/users/:userid',
-        components: {
-            default: UserData
-        }
-    },
-    {
-        path: '/project/:id',
-        components: {
-            default: Project
-        },
-        beforeEnter: (to, from, next) => {
-            if(to.params.id.match(OBJECT_ID_REGEX)) {
-                next();
-            } else {
-                let newId = ObjectID();
-                next({ path: `/project/${newId}` });
-            }
-        }
-    },
-    {
         path: '*',
         component: NotFound
     }
 ]
+
+const routes = union(
+    projectsRoutes,
+    usersRoutes,
+    tasksRoutes,
+    baseRoutes
+);
 
 const router = new VueRouter({
     mode: 'history',
