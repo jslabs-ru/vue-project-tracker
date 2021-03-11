@@ -5,25 +5,9 @@ import VueRouter from 'vue-router';
 import projectsRoutes from '@/router/projects';
 import usersRoutes from '@/router/users';
 import tasksRoutes from '@/router/tasks';
-
-import Main from '@/components/Main.vue';
-
-import NotFound from '@/components/NotFound.vue';
+import baseRoutes from '@/router/base';
 
 Vue.use(VueRouter);
-
-const baseRoutes = [
-    {
-        path: '/',
-        components: {
-            default: Main
-        }
-    },
-    {
-        path: '*',
-        component: NotFound
-    }
-]
 
 const routes = union(
     projectsRoutes,
