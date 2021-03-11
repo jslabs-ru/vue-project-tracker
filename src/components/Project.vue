@@ -27,6 +27,23 @@
                     </div>
                 </div>
 
+
+                <div class="form-group">
+                    <label for="project-description">Description</span></label>
+                    <textarea
+                        class="form-control"
+                        id="project-description"
+                        v-model="projectDescription"
+                        @input="$v.projectDescription.$touch"
+                    />
+
+                    <div
+                        class="alert alert-danger"
+                        role="alert"
+                        v-if="$v.projectDescription.$dirty && !$v.projectDescription.required"
+                    >Description should not be empty</div>
+                </div>
+
                 <!-- <pre class="card">
                     {{ valObject }}
                 </pre> -->
@@ -69,6 +86,8 @@ import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
 import { required, minLength } from 'vuelidate/lib/validators';
 
+import ProjectService from '@/services/projectService';
+
 const DEFAULT_NAME_LENGTH = 4;
 
 export default {
@@ -77,6 +96,7 @@ export default {
         return {
             defaultNameLength: DEFAULT_NAME_LENGTH,
             projectName: '',
+            projectDescription: '',
             projectDate: '',
             projectTimestamp: null,
             submitStatus: ''
@@ -89,6 +109,9 @@ export default {
         projectName: {
             required,
             minLength: minLength(DEFAULT_NAME_LENGTH)
+        },
+        projectDescription: {
+            required
         },
         projectDate: {
             required,
@@ -116,15 +139,20 @@ export default {
             this.$v.$touch();
 
             if (this.$v.$invalid) {
-                this.submitStatus = 'ERROR'
+                this.submitStatus = 'ERROR';
             } else {
-                this.submitStatus = 'PENDING'
-                setTimeout(() => {
-                    this.submitStatus = 'OK'
-                }, 500)
-            }
+                this.submitStatus = 'PENDING';
 
-            // console.log(this.$v.projectName.$model, this.$v.projectDate.$model);
+                ProjectService.createProject({
+                    name: this.$v.projectName.$model,
+                    description: this.$v.projectDescription.$model,
+                    created_at: this.toUnixTimestamp(this.$v.projectDate.$model)
+                }).then(res => {
+                    this.submitStatus = 'OK';
+                }).catch(error => {
+                    this.submitStatus = 'SERVER ERROR: ' + error.response.data.error;
+                })
+            }
         }
     }
 }

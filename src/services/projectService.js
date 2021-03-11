@@ -20,8 +20,6 @@ const ProjectService = {
             data
         }).then(res => {
             return res.data;
-        }).catch(error => {
-            throw new Error('[ProjectService createProject]' + error.message)
         })
     }
 }
