@@ -11,12 +11,13 @@
                         id="project-name"
                         autocomplete="off"
                         v-model="projectName"
+                        @input="$v.projectName.$touch"
                     />
                     <div>
                         <div
                             class="alert alert-danger"
                             role="alert"
-                            v-if="!$v.projectName.required"
+                            v-if="$v.projectName.$dirty && !$v.projectName.required"
                         >Name should not be empty</div>
                         <div
                             class="alert alert-danger"
@@ -25,6 +26,10 @@
                         >Name length should be at least {{ defaultNameLength }}</div>
                     </div>
                 </div>
+
+                <!-- <pre class="card">
+                    {{ valObject }}
+                </pre> -->
 
                 <datepicker
                     placeholder="Выберите дату"
@@ -71,6 +76,9 @@ export default {
         }
     },
     computed: {
+        valObject () {
+            return JSON.stringify(this.$v, null, 2)
+        },
         dateModel: {
             get () {
                 return this.projectName;
