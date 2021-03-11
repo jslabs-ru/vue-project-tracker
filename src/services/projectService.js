@@ -13,6 +13,16 @@ const ProjectService = {
         })
     },
 
+    getProjectById (id) {
+        return axios({
+            url: PROJECTS_ENDPOINT + `/${id}`
+        }).then(res => {
+            return res.data;
+        }).catch(error => {
+            throw new Error('[ProjectService getProjectById]' + error.message)
+        })
+    },
+
     createProject (data) {
         return axios({
             url: PROJECTS_ENDPOINT,

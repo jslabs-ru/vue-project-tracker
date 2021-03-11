@@ -36,6 +36,7 @@ import { isUndefined, isFinite } from 'lodash';
 import ProjectService from '@/services/projectService';
 
 export default {
+    name: 'Projects',
     data () {
         return {
             isLoading: true,
@@ -51,14 +52,18 @@ export default {
         }
     },
     created () {
-        ProjectService.getAll().then(projects => {
-            this.items = projects;
-            this.isLoading = false;
-        })
+        this.getUsersData();
+        this.$eventBus.$on('project-created', this.getUsersData);
     },
     methods: {
+        getUsersData () {
+            ProjectService.getAll().then(projects => {
+                this.items = projects;
+                this.isLoading = false;
+            })
+        },
         onRowClick (item) {
-            this.$router.push({path: `/users/${item.userid}`}, () => {});
+            this.$router.push({path: `/projects/list/${item.id}`}, () => {});
         },
         createProject () {
             this.$router.push({path: '/projects/create'}, () => {})

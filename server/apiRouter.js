@@ -30,6 +30,21 @@ function createApiRouter(app) {
         res.json(result);
     });
 
+    router.get('/projects/:id', async function(req, res) {
+        const db = app.get('db');
+        const { id } = req.params;
+
+        const projects = await db(PROJECTS).where('id', id);
+
+        if(projects.length) {
+            res.status(200).json(projects[0]);
+        } else {
+            res.status(404).json({
+                error: 'Not found'
+            });
+        }
+    });
+
     router.post('/projects', async function(req, res) {
         const db = app.get('db');
 
