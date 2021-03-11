@@ -16,3 +16,7 @@
 	cursor: pointer;
 }
 .paginator-item--active, .red {color: red;}
+
+.preview-image {
+    border: 1px solid gray;
+}

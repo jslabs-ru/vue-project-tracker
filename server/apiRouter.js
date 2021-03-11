@@ -50,7 +50,7 @@ function createApiRouter(app) {
 
         const projectData = req.body;
 
-        var { name, description, created_at } = projectData;
+        var { name, description, logo, created_at } = projectData;
 
         if(!name) {
             return res.status(400).json({
@@ -64,6 +64,10 @@ function createApiRouter(app) {
                 ok: 0,
                 error: 'Project description is not defined'
             });
+        }
+
+        if(!logo) {
+            Object.assign(projectData, {logo: ''});
         }
 
         if(!created_at) {

@@ -22,8 +22,18 @@
                         <div
                             class="alert alert-danger"
                             role="alert"
+                            v-if="$v.projectName.$dirty && !$v.projectName.isAlphabetic"
+                        >Use only english characters</div>
+                        <div
+                            class="alert alert-danger"
+                            role="alert"
                             v-if="!$v.projectName.minLength"
                         >Name length should be at least {{ defaultNameLength }}</div>
+                        <div
+                            class="alert alert-danger"
+                            role="alert"
+                            v-if="!$v.projectName.maxLength"
+                        >Too long project name, should be 15 </div>
                     </div>
                 </div>
 
@@ -48,14 +58,34 @@
                     {{ valObject }}
                 </pre> -->
 
-                <datepicker
-                    placeholder="Выберите дату"
-                    name="datepicker"
-                    id="article-date"
+                <div class="form-group" v-if="projectBase64">
+                    <img :src="projectBase64" class="preview-image" />
+                </div>
 
-                    v-model="projectDate"
-                    @selected="onDateSelected"
-                ></datepicker>
+                <div class="form-group">
+                    <ImageUploader
+                        loadBtnText="Upload project logo"
+                        :previewFormat="{width: 200, height: 104}"
+                        @image-uploaded="onLogoUploaded"
+                    />
+
+                    <div
+                        class="alert alert-danger"
+                        role="alert"
+                        v-if="$v.projectBase64.$dirty && !$v.projectBase64.isBase64Format"
+                    >Image should be in base64 format</div>
+                </div>
+
+                <div class="form-group">
+                    <datepicker
+                        placeholder="Выберите дату"
+                        name="datepicker"
+                        id="article-date"
+
+                        v-model="projectDate"
+                        @selected="onDateSelected"
+                    ></datepicker>
+                </div>
 
                 <div>
                     <div
@@ -72,11 +102,13 @@
 
                 <div>{{ submitStatus }}</div>
 
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                    v-on:submit="onSave"
-                >Save</button>
+                <div class="form-group">
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                        v-on:submit="onSave"
+                    >Save</button>
+                </div>
         </form>
     </div>
 </template>
@@ -84,11 +116,15 @@
 <script>
 import Datepicker from 'vuejs-datepicker';
 import moment from 'moment';
-import { required, minLength } from 'vuelidate/lib/validators';
+import isBase64 from 'is-base64';
+import { required, minLength, maxLength } from 'vuelidate/lib/validators';
+
+import ImageUploader from '@/components/images/ImageUploader';
 
 import ProjectService from '@/services/projectService';
 
 const DEFAULT_NAME_LENGTH = 4;
+const DEFAULT_NAME_MAX_LENGTH = 15;
 
 export default {
     name: 'ProjectForm',
@@ -98,20 +134,31 @@ export default {
             projectName: '',
             projectDescription: '',
             projectDate: '',
+            projectBase64: null,
             projectTimestamp: null,
             submitStatus: ''
         }
     },
     components: {
-        Datepicker
+        Datepicker,
+        ImageUploader
     },
     validations: {
         projectName: {
             required,
-            minLength: minLength(DEFAULT_NAME_LENGTH)
+            isAlphabetic: function(val) {
+                return val.match(/^[A-Za-z]+$/) ? true : false;
+            },
+            minLength: minLength(DEFAULT_NAME_LENGTH),
+            maxLength: maxLength(DEFAULT_NAME_MAX_LENGTH),
         },
         projectDescription: {
             required
+        },
+        projectBase64: {
+            isBase64Format: function(val) {
+                return isBase64(val, {mimeRequired: true}) ? true : false;
+            }
         },
         projectDate: {
             required,
@@ -135,6 +182,11 @@ export default {
             this.$v.projectDate.$touch();
             this.projectTimestamp = this.toUnixTimestamp(val);
         },
+        onLogoUploaded (base64Payload) {
+            const { num, base64 } = base64Payload;
+            this.projectBase64 = base64;
+            this.$v.projectBase64.$touch();
+        },
         onSave () {
             this.$v.$touch();
 
@@ -146,6 +198,7 @@ export default {
                 ProjectService.createProject({
                     name: this.$v.projectName.$model,
                     description: this.$v.projectDescription.$model,
+                    logo: this.$v.projectBase64.$model,
                     created_at: this.toUnixTimestamp(this.$v.projectDate.$model)
                 }).then(res => {
                     this.submitStatus = 'OK';

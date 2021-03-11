@@ -1,10 +1,12 @@
 <template>
     <div>
-        <button
+        Main page
+        
+        <!-- <button
             type="submit"
             class="btn btn-primary"
             @click="createProject"
-        >Create project</button>
+        >Create project</button> -->
     </div>
 </template>
 
@@ -12,9 +14,9 @@
 export default {
     name: 'Home',
     methods: {
-        createProject () {
-            this.$router.push({path: '/projects/1'}, () => {})
-        }
+        // createProject () {
+        //     this.$router.push({path: '/projects/1'}, () => {})
+        // }
     }
 }
 </script>

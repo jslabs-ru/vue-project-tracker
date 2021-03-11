@@ -12,7 +12,8 @@
             class="mb-2"
         >
             <template #header>
-                <b-card-title>project.name</b-card-title>
+                <b-card-title class="project-title">{{ project.name }}</b-card-title>
+                <img v-if="project.logo" :src="project.logo" width="70" class="project-logo"/>
             </template>
 
             <b-card-body>
@@ -58,5 +59,11 @@ export default {
 }
 .sub-title-label {
     font-weight: bold;
+}
+.project-title {
+    float: left;
+}
+.project-logo {
+    float: right;
 }
 </style>
