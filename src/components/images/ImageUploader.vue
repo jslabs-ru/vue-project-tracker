@@ -12,7 +12,6 @@
                     :name="uploadFieldName"
                     @click="onClick($event)"
                     @change="onChange($event.target.files)"
-                    multiple
                     type="file"
                     :accept="accept"
                     class="images-upload-input"
@@ -23,7 +22,6 @@
 </template>
 
 <script>
-import when from 'when';
 import Pica from 'pica/dist/pica';
 
 const pica = Pica({features: [ 'js', 'wasm', 'ww', 'cib' ]});
@@ -78,49 +76,35 @@ export default {
             this.imagesCount = files.length;
             this.files = files;
 
-            this.isUploading = true;
+            const file = files[0];
 
-            const uploadMultipleFiles = (index) => {
-                const file = files[index];
+            this.isUploading = false;
 
-                this.resizeImageAndConvertToBase64(file);
-            }
-
-            return when.iterate(
-                index => index + 1,
-                index => index === this.imagesCount,
-                uploadMultipleFiles,
-                0
-            ).then(_ => {
-                /* TODO */
-            }).catch(error => {
-                throw new Error('Uploader onChange when.iterate error: ' + error.message);
-            }).finally(_ => {
-                this.isUploading = false;
+            this.resizeImageAndConvertToBase64(file).then(base64 => {
+                this.$emit('image-uploaded', {
+                    num: this.num,
+                    base64
+                });
             });
         },
-        setCanvasWidthHeight (w, h) {
+        setCanvasDimensions (w, h) {
             this.canvasResized.width = w;
             this.canvasResized.height = h;
         },
         resizeImageAndConvertToBase64 (file) {
-            const vm = this;
+            return new Promise((resolve, reject) => {
+                const heightResize = this.previewFormat.height;
+                const image = new Image();
+                image.src = window.URL.createObjectURL(file);
 
-            const heightResize = this.previewFormat.height;
-            const image = new Image();
-            image.src = window.URL.createObjectURL(file);
-
-            image.onload = function () {
-                let k = heightResize / this.naturalHeight;
-                vm.setCanvasWidthHeight(Math.floor(this.naturalWidth * k), heightResize);
-                pica.resize(this, vm.canvasResized, {}).then(_ => {
-                    let base64 = vm.canvasResized.toDataURL();
-                    vm.$emit('image-uploaded', {
-                        num: vm.num,
-                        base64
+                image.onload = () => {
+                    let k = heightResize / image.naturalHeight;
+                    this.setCanvasDimensions(Math.floor(image.naturalWidth * k), heightResize);
+                    pica.resize(image, this.canvasResized, {}).then(_ => {
+                        resolve(this.canvasResized.toDataURL()); /* image in base64 formatted: see canvas.toDataURL() method */
                     });
-                })
-            };
+                };
+            })
         },
         onClick (e) {
             this.$emit('click', e);
