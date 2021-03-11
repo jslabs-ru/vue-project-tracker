@@ -36,9 +36,22 @@
                     name="datepicker"
                     id="article-date"
 
-                    v-model="dateModel"
+                    v-model="projectDate"
                     @selected="onDateSelected"
                 ></datepicker>
+
+                <div>
+                    <div
+                        class="alert alert-danger"
+                        role="alert"
+                        v-if="$v.projectDate.$dirty && !$v.projectDate.required"
+                    >Date should not be empty</div>
+                    <div
+                        class="alert alert-danger"
+                        role="alert"
+                        v-if="$v.projectDate.$dirty && !$v.projectDate.isAfterCurrentTimestamp"
+                    >Date should not be in future</div>
+                </div>
 
                 <button
                     type="submit"
@@ -62,7 +75,7 @@ export default {
         return {
             defaultNameLength: DEFAULT_NAME_LENGTH,
             projectName: '',
-            projectDate: '2021-03-03',
+            projectDate: '',
             projectTimestamp: null,
         }
     },
@@ -73,19 +86,19 @@ export default {
         projectName: {
             required,
             minLength: minLength(DEFAULT_NAME_LENGTH)
+        },
+        projectDate: {
+            required,
+            isAfterCurrentTimestamp: function(val) {
+                let timestamp = this.toUnixTimestamp(val);
+                let currentTimestamp = moment().unix();
+                return timestamp > currentTimestamp ? false : true;
+            }
         }
     },
     computed: {
         valObject () {
             return JSON.stringify(this.$v, null, 2)
-        },
-        dateModel: {
-            get () {
-                return this.projectName;
-            },
-            set (val) {
-                this.projectDate = val;
-            }
         }
     },
     methods: {
@@ -93,10 +106,14 @@ export default {
             return moment(val).unix()
         },
         onDateSelected (val) {
+            this.$v.projectDate.$touch();
             this.projectTimestamp = this.toUnixTimestamp(val);
         },
         onSave () {
-            console.log(this.$v.projectName.$model);
+            this.$v.projectName.$touch();
+            this.$v.projectDate.$touch();
+
+            console.log(this.$v.projectName.$model, this.$v.projectDate.$model);
         }
     }
 }
