@@ -14,20 +14,28 @@ export default [
         path: '/projects',
         components: {
             default: Projects
-        }
-    },
-    {
-        path: '/projects/:id',
-        components: {
-            default: Project
         },
-        beforeEnter: (to, from, next) => {
-            if(to.params.id.match(OBJECT_ID_REGEX)) {
-                next();
-            } else {
-                let newId = ObjectID();
-                next({ path: `/project/${newId}` });
+        children: [
+            {
+                path: 'create',
+                components: {
+                    project: Project
+                }
             }
-        }
+        ]
     },
+    // {
+    //     path: '/projects/:id',
+    //     components: {
+    //         default: Project
+    //     },
+    //     beforeEnter: (to, from, next) => {
+    //         if(to.params.id.match(OBJECT_ID_REGEX)) {
+    //             next();
+    //         } else {
+    //             let newId = ObjectID();
+    //             next({ path: `/projects/${newId}` });
+    //         }
+    //     }
+    // },
 ]
