@@ -13,7 +13,7 @@ export default {
     name: 'Home',
     methods: {
         createProject () {
-            this.$router.push({path: '/project/1'}, () => {})
+            this.$router.push({path: '/projects/1'}, () => {})
         }
     }
 }

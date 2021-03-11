@@ -1,4 +1,6 @@
 import ObjectID from 'bson-objectid';
+import Projects from '@/components/Projects.vue';
+
 const OBJECT_ID_REGEX = /^[0-9a-fA-F]{24}$/;
 
 const Project = () =>
@@ -9,7 +11,13 @@ const Project = () =>
 
 export default [
     {
-        path: '/project/:id',
+        path: '/projects',
+        components: {
+            default: Projects
+        }
+    },
+    {
+        path: '/projects/:id',
         components: {
             default: Project
         },

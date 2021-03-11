@@ -1,24 +1,28 @@
 <template>
-    <div>
-        <b-spinner
-            v-if="isLoading"
-            variant="primary"
-            label="Spinning"
-        ></b-spinner>
+    <div class="root-page container">
+        <div class="row">
+            <div class="cell">
+                <b-spinner
+                    v-if="isLoading"
+                    variant="primary"
+                    label="Spinning"
+                ></b-spinner>
 
-        <div v-else>
-            <b-table
-                id="my-table"
-                :items="items"
-                :per-page="perPage"
-                :current-page="currentPage"
-                small
-            ></b-table>
+                <div v-else>
+                    <b-table
+                        id="my-table"
+                        :items="items"
+                        :per-page="perPage"
+                        :current-page="currentPage"
+                        small
+                    ></b-table>
 
-            <Paginator
-                :pagesCount="pagesCount"
-                @page-click="onPageClick"
-            />
+                    <Paginator
+                        :pagesCount="pagesCount"
+                        @page-click="onPageClick"
+                    />
+                </div>
+            </div>
         </div>
     </div>
 </template>
