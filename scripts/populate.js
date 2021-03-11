@@ -10,7 +10,7 @@ const knex = require('knex')({
     useNullAsDefault: true
 });
 
-const PROJECTS = 'tasks';
+const PROJECTS = 'projects';
 const PROJECTS_COUNT = 3;
 
 const TASKS = 'tasks';
@@ -34,8 +34,17 @@ function getRandomTasks() {
 }
 
 (async function() {
+    await knex.schema.dropTableIfExists(PROJECTS);
     await knex.schema.dropTableIfExists(TASKS);
     await knex.schema.dropTableIfExists(USERS);
+
+    await knex.schema.createTable(PROJECTS, function(table) {
+        table.increments();
+        table.string('name').notNullable();
+        table.string('description').notNullable();
+        table.timestamp('created_at').defaultTo(knex.fn.now())
+        table.timestamp('updated_at').defaultTo(knex.fn.now())
+    });
 
     await knex.schema.createTable(TASKS, function(table) {
         table.increments();
@@ -55,6 +64,13 @@ function getRandomTasks() {
         table.timestamp('updated_at').defaultTo(knex.fn.now());
     });
 
+    function insertProject(index) {
+        return knex(PROJECTS).insert({
+            name: faker.music.genre(),
+            description: faker.lorem.words()
+        })
+    }
+
     function insertTask(index) {
         return knex(TASKS).insert({
             description: faker.lorem.words()
@@ -70,6 +86,13 @@ function getRandomTasks() {
             tasks: JSON.stringify(getRandomTasks())
         })
     }
+
+    await when.iterate(
+        index => index + 1,
+        index => index === PROJECTS_COUNT,
+        insertProject,
+        0
+    );
 
     await when.iterate(
         index => index + 1,
