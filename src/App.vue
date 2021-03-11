@@ -3,6 +3,7 @@
         <b-navbar class="bg-light">
             <b-navbar-nav>
                 <b-nav-item to="/">Main</b-nav-item>
+                <b-nav-item to="/projects">Projects</b-nav-item>
                 <b-nav-item to="/users">Users</b-nav-item>
                 <b-nav-item to="/tasks">Tasks</b-nav-item>
             </b-navbar-nav>
