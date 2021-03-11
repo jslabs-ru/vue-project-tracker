@@ -1,4 +1,5 @@
 const express = require('express');
+const moment = require('moment');
 const bodyParser = require('body-parser');
 
 const PROJECTS = 'projects';
@@ -34,7 +35,7 @@ function createApiRouter(app) {
 
         const projectData = req.body;
 
-        var { name } = projectData;
+        var { name, description, created_at } = projectData;
 
         if(!name) {
             return res.status(400).json({
@@ -43,7 +44,19 @@ function createApiRouter(app) {
             });
         }
 
-        Object.assign(projectData, {created_at: moment().format('YYYY-MM-DD hh:mm:ss')});
+        if(!description) {
+            return res.status(400).json({
+                ok: 0,
+                error: 'Project description is not defined'
+            });
+        }
+
+        if(!created_at) {
+            Object.assign(projectData, {created_at: moment().format('YYYY-MM-DD hh:mm:ss')});
+        } else {
+            Object.assign(projectData, {created_at: moment.unix(created_at).format('YYYY-MM-DD hh:mm:ss')});
+        }
+
         Object.assign(projectData, {updated_at: moment().format('YYYY-MM-DD hh:mm:ss')});
 
         await db(PROJECTS)
