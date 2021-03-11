@@ -29,6 +29,31 @@ function createApiRouter(app) {
         res.json(result);
     });
 
+    router.post('/projects', async function(req, res) {
+        const db = app.get('db');
+
+        const projectData = req.body;
+
+        var { name } = projectData;
+
+        if(!name) {
+            return res.status(400).json({
+                ok: 0,
+                error: 'Project name is not defined'
+            });
+        }
+
+        Object.assign(projectData, {created_at: moment().format('YYYY-MM-DD hh:mm:ss')});
+        Object.assign(projectData, {updated_at: moment().format('YYYY-MM-DD hh:mm:ss')});
+
+        await db(PROJECTS)
+            .insert(projectData);
+
+        res.status(200).json({
+            ok: 1
+        });
+    })
+
     router.get('/tasks', async function(req, res) {
         let result,
             { from = 0, to = 10, count, token, ids } = req.query;
