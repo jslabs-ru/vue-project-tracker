@@ -36,6 +36,7 @@
     "faker": "^5.4.0",
     "jsonfile": "^6.1.0",
     "nodemon": "^2.0.7",
+    "vue-cli-plugin-moment": "^0.1.1",
     "vue-template-compiler": "^2.6.12"
   }
 }

@@ -9,5 +9,10 @@ module.exports = {
                 target: 'http://localhost:3001/'
             }
         }
+    },
+    pluginOptions: {
+        moment: {
+            locales: ['en']
+        }
     }
 }
