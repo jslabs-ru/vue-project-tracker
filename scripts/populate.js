@@ -1,11 +1,18 @@
+const fs = require('fs');
 const when = require('when');
 const faker = require('faker');
 const ObjectID = require('bson-objectid');
 
+const DIR = './data';
+
+if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+}
+
 const knex = require('knex')({
     client: 'sqlite3',
     connection: {
-        filename: './data/data.db',
+        filename: `${DIR}/data.db`,
     },
     useNullAsDefault: true
 });
