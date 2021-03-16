@@ -17,3 +17,5 @@
 - v4-dynamic-import
 - v5-users-routes-with-remote-api-proxy
 - v6-express-api-server
+- v7-paginator-vuelidate
+- v8-pica-resize-image-uploader-and-other
