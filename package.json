@@ -7,7 +7,7 @@
     "serve": "npm run dev-service",
     "dev-service": "vue-cli-service --port 8081 serve",
     "dev-api-server": "PORT=3001 nodemon ./server",
-    "postinstall" : "npm run populate",
+    "postinstall" : "node ./scripts/createDbFile.js && npm run populate",
     "populate": "node ./scripts/populate",
     "build": "vue-cli-service build"
   },
