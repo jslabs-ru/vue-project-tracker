@@ -10,7 +10,7 @@
     "postinstall": "node ./scripts/createDbFile.js && npm run populate",
     "populate": "node ./scripts/populate",
     "build": "vue-cli-service build",
-    "start": "PORT=5000 node ./server/server-prod"
+    "start": "node ./server/server-prod"
   },
   "keywords": [],
   "author": "",
