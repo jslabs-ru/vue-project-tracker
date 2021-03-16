@@ -9,7 +9,8 @@
     "dev-api-server": "PORT=3001 nodemon ./server",
     "postinstall" : "node ./scripts/createDbFile.js && npm run populate",
     "populate": "node ./scripts/populate",
-    "build": "vue-cli-service build"
+    "build": "vue-cli-service build",
+    "start": "npm run dev-api-server && npm run dev-service"
   },
   "keywords": [],
   "author": "",
