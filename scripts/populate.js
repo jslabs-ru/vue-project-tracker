@@ -5,8 +5,8 @@ const ObjectID = require('bson-objectid');
 
 const DIR = './data';
 
-if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
+if (!fs.existsSync(DIR)){
+    fs.mkdirSync(DIR);
 }
 
 const knex = require('knex')({
