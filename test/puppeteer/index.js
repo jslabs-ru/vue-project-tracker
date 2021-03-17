@@ -14,9 +14,14 @@ const PORT = 5000;
 const BASE_URL = `http://localhost:${PORT}`;
 const PAGE_ROOT_SELECTOR = '.root-page';
 const HEADLESS = true; /* change to false in demonstration mode */
-const SLEEP_DELAY = 1;
+const SLEEP_DELAY = 2;
 
-let browser, page, appProcess;
+let browser, page, appProcess, users;
+
+async function getUsersData() {
+    const response = await axios.get(`${BASE_URL}/api/v2/users?from=1&to=5`);
+    return response.data;
+}
 
 describe('Routing system', () => {
     before(async () => {
@@ -27,6 +32,8 @@ describe('Routing system', () => {
                 if(message === 'online') resolve();
             });
         })
+
+        users = await getUsersData();
 
         browser = await puppeteer.launch({
             headless: HEADLESS,
@@ -83,9 +90,6 @@ describe('Routing system', () => {
     });
 
     it('should render user name in table on users page', async () => {
-        const response = await axios.get(`${BASE_URL}/api/v2/users?from=1&to=5`);
-        const users = response.data;
-
         await page.goto(`${BASE_URL}/users`);
         await page
             .waitForSelector('.b-table', {visible: true})
@@ -98,7 +102,32 @@ describe('Routing system', () => {
                         ? cellsCollection[0].textContent : '';
                 }, element);
 
-                expect(firstRowNameCellTextContent).to.equal(users[0].name);
+                expect(firstRowNameCellTextContent).to.match(new RegExp(users[0].name));
+                if(!HEADLESS) sleep.sleep(SLEEP_DELAY);
+
+                let spanElementHandle = await page.$(`#name-${users[0].userid}`);
+                spanElementHandle.click();
+            })
+            .catch(error => {
+                console.log('ERR:', error);
+            })
+    });
+
+    it('should render user details on user page', async () => {
+        const user = users[0];
+        const { userid, email } = user;
+        await page.goto(`${BASE_URL}/users/${userid}`);
+        await page
+            .waitForSelector('.tab-content', {visible: true})
+            .then(async (element) => {
+
+                const userEmailTextContent = await page.evaluate(element => {
+                    const collection  = element.getElementsByClassName('user-data-email');
+                    return collection.length && collection[0]
+                        ? collection[0].textContent : '';
+                }, element);
+
+                expect(userEmailTextContent).to.match(new RegExp(email));
             })
             .catch(error => {
                 console.log('ERR:', error);

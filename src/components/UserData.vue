@@ -14,11 +14,11 @@
                     style="max-width: 20rem;"
                     class="mb-2"
                 >
-                    <b-card-text>
+                    <b-card-text class="user-data-name">
                         {{ user.username }}
                     </b-card-text>
 
-                    <b-card-text>
+                    <b-card-text class="user-data-email">
                         {{ user.email }}
                     </b-card-text>
                 </b-card>

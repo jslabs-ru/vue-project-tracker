@@ -22,6 +22,8 @@
                         sticky-header
                         @row-clicked="onRowClick"
                     >
+                        <template #cell(name)="row"><span :id="`name-${row.item.userid}`">{{ row.item.name }}</span></template>
+
                         <template #cell(actions)="row">
                             <b-button size="sm"
                                 class="mr-1"
