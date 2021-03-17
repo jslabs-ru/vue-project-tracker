@@ -1,7 +1,7 @@
 <template>
-    <div>
-        Main page
-        
+    <div class="root-page">
+        Project Tracker - Main page
+
         <!-- <button
             type="submit"
             class="btn btn-primary"
