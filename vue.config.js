@@ -1,4 +1,11 @@
 module.exports = {
+    pages: {
+        index: {
+            entry: 'src/main.js',
+            template: 'tpl/index.html',
+            title: 'Project Tracker'
+        }
+    },
     devServer: {
         proxy: {
             '^/api/v1': {
