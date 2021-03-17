@@ -34,6 +34,8 @@ async function startServer(db) {
 
     const server = app.listen(PORT, function() {
         console.log('Server is running: http://localhost:%j', PORT);
+
+        if(process.send) process.send('online');
     });
 
     process.on('message', (message) => {
