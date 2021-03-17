@@ -6,10 +6,16 @@ export default [
         path: '/',
         components: {
             default: Main
+        },
+        meta: {
+            title: 'Main page'
         }
     },
     {
         path: '*',
-        component: NotFound
+        component: NotFound,
+        meta: {
+            title: '404'
+        }
     }
 ]

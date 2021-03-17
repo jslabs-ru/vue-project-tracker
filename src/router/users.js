@@ -15,12 +15,18 @@ export default [
         path: '/users',
         components: {
             default: Users
+        },
+        meta: {
+            title: 'Users'
         }
     },
     {
         path: '/users/:userid',
         components: {
             default: UserData
+        },
+        meta: {
+            title: 'User Details'
         }
     }
 ]

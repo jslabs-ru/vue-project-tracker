@@ -21,15 +21,24 @@ export default [
                 path: 'create',
                 components: {
                     project: ProjectForm
+                },
+                meta: {
+                    title: 'Create Project'
                 }
             }
-        ]
+        ],
+        meta: {
+            title: 'Projects'
+        }
     },
     {
         path: '/projects/list/:id',
         components: {
             default: Project
         },
+        meta: {
+            title: 'Project Details'
+        }
         // beforeEnter: (to, from, next) => {
         //     if(to.params.id.match(OBJECT_ID_REGEX)) {
         //         next();
