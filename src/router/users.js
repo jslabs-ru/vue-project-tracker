@@ -25,6 +25,9 @@ export default [
         components: {
             default: UserData
         },
+        props: {
+            default: true
+        },
         meta: {
             title: 'User Details'
         }

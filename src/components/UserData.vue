@@ -82,6 +82,9 @@ export default {
     components: {
         Autocomplete
     },
+    props: {
+        userid: String
+    },
     data () {
         return {
             isLoading: true,
@@ -107,11 +110,6 @@ export default {
                 tasks: tasks.map(item => item.id)
             }
             UserService.saveUserTasks(payload);
-        }
-    },
-    computed: {
-        userid () {
-            return this.$route.params.userid;
         }
     },
     created () {
