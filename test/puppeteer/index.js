@@ -23,7 +23,7 @@ async function getUsersData() {
     return response.data;
 }
 
-describe('Routing system', () => {
+describe('Routing system tests', () => {
     before(async () => {
         appProcess = fork(path.resolve(__dirname, '..', '..', 'server', 'server-prod.js'));
 
@@ -45,10 +45,6 @@ describe('Routing system', () => {
         page = await browser.newPage();
     });
 
-    it('should run appProcess', async () => {
-        expect(appProcess).to.be.ok;
-    });
-
     it('should open main page', async () => {
         await page.goto(`${BASE_URL}/`);
         await page
@@ -62,13 +58,11 @@ describe('Routing system', () => {
                 if(elements[0]) {
                     const text = $(elements[0]).text();
                     expect(text).to.match(/Project Tracker - Main page/);
+
                     if(!HEADLESS) sleep.sleep(SLEEP_DELAY);
                 } else {
                     console.log(`Not found selector: ${PAGE_ROOT_SELECTOR}`);
                 }
-            })
-            .catch(error => {
-                console.log('ERR:', error);
             })
     });
 
@@ -83,9 +77,6 @@ describe('Routing system', () => {
             .then(async (element) => {
                 const text = await page.evaluate(element => element.textContent, element);
                 expect(text).to.equal(project.name);
-            })
-            .catch(error => {
-                console.log('ERR:', error);
             })
     });
 
@@ -108,9 +99,6 @@ describe('Routing system', () => {
                 let spanElementHandle = await page.$(`#name-${users[0].userid}`);
                 spanElementHandle.click();
             })
-            .catch(error => {
-                console.log('ERR:', error);
-            })
     });
 
     it('should render user details on user page', async () => {
@@ -130,7 +118,8 @@ describe('Routing system', () => {
                 expect(userEmailTextContent).to.match(new RegExp(email));
             })
             .catch(error => {
-                console.log('ERR:', error);
+                console.error(error);
+                throw new Error('Test failed');
             })
     });
 
@@ -138,7 +127,6 @@ describe('Routing system', () => {
         await page.close();
         await browser.close();
         appProcess.send('shutdown');
-        process.exit();
     });
 });
 
