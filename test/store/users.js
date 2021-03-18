@@ -30,12 +30,13 @@ const store = new Vuex.Store({
 });
 
 describe('Store users module', () => {
-    let getAllSpy, getUserAccountDataSpy, deleteUserAccountSpy;
+    let getAllSpy, getUserAccountDataSpy, deleteUserAccountSpy, deleteUserTaskSpy;
 
     before(function() {
         getAllSpy = sinon.spy(UserService, 'getAll');
         getUserAccountDataSpy = sinon.spy(UserService, 'getUserAccountData');
         deleteUserAccountSpy = sinon.spy(UserService, 'deleteUserAccount');
+        deleteUserTaskSpy = sinon.spy(UserService, 'deleteUserTask');
     });
 
     it('should perform FETCH_USER_ACCOUNT_DATA', async () => {
@@ -51,6 +52,16 @@ describe('Store users module', () => {
     it('should perform DELETE_USER_ACCOUNT with valid userid', async () => {
         await store.dispatch(DELETE_USER_ACCOUNT, USER_ID);
         expect(deleteUserAccountSpy.calledOnce).to.equal(true);
+    });
+
+    it('should perform DELETE_USER_TASK without valid userid', async () => {
+        await store.dispatch(DELETE_USER_TASK, {userid: '1'});
+        expect(deleteUserTaskSpy.calledOnce).to.equal(false);
+    });
+
+    it('should perform DELETE_USER_TASK with valid userid and valid taskId', async () => {
+        await store.dispatch(DELETE_USER_TASK, {userid: USER_ID, taskId: 1});
+        expect(deleteUserTaskSpy.calledOnce).to.equal(true);
     });
 
     after(function() {
