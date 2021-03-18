@@ -10,6 +10,12 @@
 ## Run dev server with vue-cli-service:
 ```npm run serve```
 
+## Run store tests with mocha & chai:
+```npm test```
+
+## Run end-to-end tests with puppeteer:
+```npm run e2e-test```
+
 ## Current tags:
 - v1-init-modules
 - v2-data-json-import
