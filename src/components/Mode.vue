@@ -1,6 +1,6 @@
 <template>
     <div class="root-page">
-        Current mode: {{ mode }}
+        Current mode: <span class="mode">{{ mode }}</span>
     </div>
 </template>
 
