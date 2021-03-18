@@ -138,6 +138,9 @@ export default {
             })
             .finally(() => {
                 this.isLoading = false;
+                /* highlight danger zone tab */
+                const dangerZoneLink = this.$el.querySelector(`a[aria-posinset='3']`);
+                dangerZoneLink.classList.add('dangerous');
             })
     },
     methods: {
@@ -201,5 +204,8 @@ export default {
 }
 .user-tasks-list {
     margin-left: 15px;
+}
+.dangerous {
+    color: red;
 }
 </style>
