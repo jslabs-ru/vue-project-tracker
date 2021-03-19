@@ -25,3 +25,4 @@
 - v6-express-api-server
 - v7-paginator-vuelidate
 - v8-pica-resize-image-uploader-and-other
+- v9-e2e-tests-and-store-tests
